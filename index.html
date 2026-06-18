@@ -3,333 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Mel ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Quicksand:wght500;600;700&family=Satisfy&display=swap" rel="stylesheet">
+    <title>Para Mel ⚜️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --snoopy-red: #e2231a;
-            --snoopy-yellow: #fcd116;
-            --snoopy-black: #1a1a1a;
-            --lily-pink: #ffb7b2;
-            --lily-soft: #fff1f0;
-            --cream-card: #fffdfa;
-            --text-dark: #222222;
+            --lily-white: #fffdf9;
+            --lily-pink: #fbc4ab;
+            --lily-soft-purple: #e8dbfc;
+            --text-dark: #2d2533;
+            --accent-gold: #dfb259;
         }
 
-        * { box-sizing: border-box; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            margin: 0;
-            padding: 20px;
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #ffe5ec 0%, #ffcad4 50%, #b5e2fa 100%);
+            padding: 20px;
             overflow-x: hidden;
+            background: linear-gradient(135deg, #f7eae1 0%, #e3d5ca 50%, #d8e2dc 100%);
             position: relative;
         }
 
-        /* --- EFECTO DE LIRIOS FLOTANTES EN EL FONDO --- */
-        .bg-lily {
+        /* --- ANIMACIÓN DE LIRIOS Y PÉTALOS FLOTANTES --- */
+        .petal {
             position: fixed;
             pointer-events: none;
             z-index: 1;
-            font-size: 30px;
-            animation: floatLily 12s linear infinite;
-            opacity: 0.6;
+            opacity: 0;
+            animation: fadeAndFloat 10s linear infinite;
         }
 
-        @keyframes floatLily {
-            0% { transform: translateY(105vh) translateX(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-10vh) translateX(100px) rotate(360deg); opacity: 0; }
+        @keyframes fadeAndFloat {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% {
+                transform: translateY(110vh) translateX(150px) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
         }
 
-        /* Postal Romántica */
-        .postal-container {
+        /* --- CONTENEDOR PRINCIPAL: EFECTO CRISTAL --- */
+        .card-container {
             width: 100%;
-            max-width: 850px;
-            background: var(--cream-card);
-            border: 4px solid var(--snoopy-black);
-            border-radius: 30px;
-            box-shadow: 15px 15px 0px var(--snoopy-black),
-                        0 25px 50px rgba(0,0,0,0.15);
-            padding: 40px;
-            display: flex;
-            gap: 40px;
+            max-width: 650px;
+            background: rgba(255, 253, 249, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 50px rgba(45, 37, 51, 0.1);
+            text-align: center;
             position: relative;
             z-index: 10;
-            background-image: radial-gradient(rgba(255, 183, 178, 0.2) 15%, transparent 16%);
-            background-size: 16px 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Divisor de páginas estilo San Valentín */
-        .divider {
-            width: 3px;
-            background: dashed rgba(26, 26, 26, 0.3);
-            height: auto;
-            position: relative;
-        }
-        .divider::after {
-            content: "🌸";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--cream-card);
-            padding: 5px;
-            font-size: 22px;
+        .card-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(45, 37, 51, 0.15);
         }
 
-        /* --- LADO IZQUIERDO: LA IMAGEN DE SNOOPY --- */
-        .left-side {
-            flex: 0 0 320px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .photo-frame {
-            width: 100%;
-            background: white;
-            border: 3px solid var(--snoopy-black);
-            padding: 15px 15px 25px 15px;
-            border-radius: 4px;
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.08);
-            transform: rotate(-3deg);
-            cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
-        .photo-frame:hover {
-            transform: rotate(0deg) scale(1.05);
-        }
-
-        .photo-frame img {
-            width: 100%;
-            height: auto;
-            border: 2px solid var(--snoopy-black);
-            display: block;
-        }
-
-        .photo-caption {
-            font-family: 'Caveat', cursive;
-            font-size: 1.7rem;
-            color: var(--snoopy-red);
-            text-align: center;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        /* --- LADO DERECHO: LA CARTA --- */
-        .right-side {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .title {
-            font-family: 'Satisfy', cursive;
+        /* Detalle ornamental de Lirio superior */
+        .lily-icon {
             font-size: 3rem;
-            color: #d44773;
-            margin: 0 0 10px 0;
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: pulseLily 3s ease-in-out infinite;
         }
 
-        /* Sección del Piropo de Lirios */
-        .lily-compliment {
-            background: #fff0f3;
-            border-left: 4px solid #ff4d6d;
-            padding: 12px;
-            margin-bottom: 18px;
-            border-radius: 0 12px 12px 0;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 1.05rem;
+        @keyframes pulseLily {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 8px rgba(223,178,89,0.5)); }
+        }
+
+        /* Título Principal */
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: #7b506f;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        /* Bloque del Piropo Destacado */
+        .poem-block {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #5c415d;
+            font-weight: 300;
             font-style: italic;
-            color: #c9184a;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.02);
+            margin-bottom: 35px;
+            padding: 0 10px;
+            position: relative;
         }
 
-        .letter-text {
-            font-size: 1.1rem;
-            line-height: 1.7;
+        .poem-block::before, .poem-block::after {
+            content: "✨";
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+            position: relative;
+            top: -5px;
+            margin: 0 8px;
+        }
+
+        /* Texto de la Carta */
+        .letter-content {
+            font-size: 1.05rem;
+            line-height: 1.9;
             color: var(--text-dark);
-            margin: 0 0 15px 0;
             text-align: justify;
+            margin-bottom: 25px;
+            font-weight: 400;
         }
 
-        /* Marcadores bonitos */
-        .highlight-apology {
-            background-color: #ffccd5;
+        .highlight {
             font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 4px;
+            color: #a8577e;
+            border-bottom: 1px dashed #a8577e;
         }
 
-        .highlight-heart {
-            background-color: rgba(252, 209, 22, 0.4);
-            font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 4px;
+        /* Divisor elegante */
+        .card-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
+            margin: 40px auto 30px auto;
+            width: 70%;
         }
 
-        /* Firma */
-        .footer-signature {
+        /* Pie de página y Firma */
+        .card-footer {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            border-top: 2px dashed rgba(26, 26, 26, 0.1);
-            padding-top: 15px;
-            margin-top: 10px;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
-        .badge {
-            font-size: 0.8rem;
-            font-weight: 700;
+        .dedication-badge {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            background: var(--snoopy-yellow);
-            border: 2px solid var(--snoopy-black);
-            padding: 6px 12px;
-            border-radius: 8px;
-            box-shadow: 3px 3px 0px var(--snoopy-black);
+            letter-spacing: 2px;
+            color: #8e7dbe;
+            font-weight: 600;
         }
 
         .signature {
-            font-family: 'Caveat', cursive;
+            font-family: 'Great Vibes', cursive;
             font-size: 2.8rem;
-            color: var(--snoopy-red);
-            line-height: 1;
+            color: #7b506f;
+            margin-top: 5px;
         }
 
-        /* Partículas del click */
-        .interactive-particle {
-            position: fixed;
-            pointer-events: none;
-            z-index: 999;
-            font-size: 24px;
-            opacity: 0;
-        }
-
-        /* Responsivo para móviles */
-        @media (max-width: 760px) {
-            .postal-container {
-                flex-direction: column;
-                padding: 25px;
-                max-width: 450px;
+        /* Responsivo */
+        @media (max-width: 480px) {
+            .card-container {
+                padding: 35px 20px;
             }
-            .divider {
-                width: 100%;
-                height: 3px;
-                margin: 15px 0;
+            .main-title {
+                font-size: 3rem;
             }
-            .divider::after {
-                transform: translate(-50%, -50%) rotate(90deg);
-            }
-            .left-side {
-                flex: none;
-                width: 100%;
-            }
-            .title {
-                font-size: 2.5rem;
-                text-align: center;
+            .poem-block {
+                font-size: 1.1rem;
             }
         }
     </style>
 </head>
 <body>
 
-    <script>
-        const flowerSymbols = ['🌸', '💮', '🌹', '✨', '🤍'];
-        for (let i = 0; i < 15; i++) {
-            const lily = document.createElement('div');
-            lily.className = 'bg-lily';
-            // Alternamos entre emojis que simulan lirios y flores delicadas
-            lily.innerHTML = flowerSymbols[Math.floor(Math.random() * flowerSymbols.length)];
-            lily.style.left = Math.random() * 100 + 'vw';
-            lily.style.animationDelay = Math.random() * 10 + 's';
-            lily.style.fontSize = (15 + Math.random() * 20) + 'px';
-            document.body.appendChild(lily);
-        }
-    </script>
-
-    <div class="postal-container">
+    <div class="card-container">
+        <div class="lily-icon">⚜️</div>
         
-        <div class="left-side">
-            <div class="photo-frame" id="postalPhoto">
-                <img src="https://i.pinimg.com/736x/8f/e9/e4/8fe9e41943767c6b9af15c49c03e91e8.jpg" alt="Snoopy con corazón">
-                <div class="photo-caption">Lo siento de corazón... 🐾</div>
-            </div>
-        </div>
+        <h1 class="main-title">Hola, Mel...</h1>
+        
+        <p class="poem-block">
+            Dicen que los lirios florecen con una elegancia única y un aroma que cautiva en el silencio... A mí me pasa lo mismo contigo; ver la pureza de tu sonrisa es recordar que la belleza más sincera de la vida se esconde en tu mirada.
+        </p>
+        
+        <p class="letter-content">
+            <span class="highlight">Perdón por casi arruinarlo</span>, por un momento sentí que perdía a una personita tan maravillosa por un malentendido.
+        </p>
 
-        <div class="divider"></div>
+        <p class="letter-content">
+            Y de corazón se lo digo, <span class="highlight">mi interés por usted es real</span>; sincero, con buenas intenciones y eso no cambiará. La veo con ojos de muchísimo cariño y ternura y, si me lo permite, se lo seguiré demostrando cada día.
+        </p>
 
-        <main class="right-side">
-            <div>
-                <h1 class="title">Hola, Mel...</h1>
-                
-                <div class="lily-compliment">
-                    "Dicen que los lirios son las flores más elegantes y sinceras de la naturaleza... pero es que ellos aún no han visto la pureza de tu sonrisa ni la luz de tus ojos." 🌸✨
-                </div>
-                
-                <p class="letter-text">
-                    <span class="highlight-apology">Perdón por casi arruinarlo</span>, por un momento sentí que perdía a una personita tan maravillosa por un malentendido.
-                </p>
+        <div class="card-divider"></div>
 
-                <p class="letter-text">
-                    Y de corazón se lo digo, <span class="highlight-heart">Mi interés por usted es Real</span>; sincero, con buenas intenciones y eso no cambiará. La veo con ojos de muchísimo cariño y ternura; si me lo permite, se lo seguiré demostrando cada día.
-                </p>
-            </div>
-
-            <footer class="footer-signature">
-                <div class="badge">Para mi personita especial ✨</div>
-                <div class="signature">Con cariño Fer, su niño</div>
-            </footer>
-        </main>
+        <footer class="card-footer">
+            <span class="dedication-badge">Para mi personita especial</span>
+            <span class="signature">Con cariño Fer, su niño</span>
+        </footer>
     </div>
 
     <script>
-        const photo = document.getElementById('postalPhoto');
+        const petalTypes = ['🌸', '💮', '✨', '🤍', '🍃'];
+        const body = document.body;
 
-        function dropElements() {
-            // Mezcla de corazones, huellitas y flores (lirios simulados)
-            const symbols = ['🌸', '❤️', '💕', '🐾', '✨', '💮'];
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
             
-            for(let i = 0; i < 6; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'interactive-particle';
-                particle.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-                
-                const rect = photo.getBoundingClientRect();
-                particle.style.left = (rect.left + rect.width / 2) + (Math.random() * 60 - 30) + 'px';
-                particle.style.top = (rect.top + rect.height / 2) + 'px';
-                
-                document.body.appendChild(particle);
-                
-                const angle = (Math.random() * Math.PI) + Math.PI; 
-                const distance = 80 + Math.random() * 100;
-                
-                particle.animate([
-                    { transform: 'translate(-50%, -50%) scale(0.5) rotate(0deg)', opacity: 0 },
-                    { opacity: 1, offset: 0.2 },
-                    { transform: `translate(calc(-50% + ${Math.cos(angle)*distance}px), calc(-50% + ${Math.sin(angle)*distance}px)) scale(1.5) rotate(${Math.random() * 80 - 40}deg)`, opacity: 0 }
-                ], { duration: 2000, easing: 'ease-out' });
-                
-                setTimeout(() => particle.remove(), 2000);
+            // Elección aleatoria de pétalo/flor/destello
+            petal.innerHTML = petalTypes[Math.floor(Math.random() * petalTypes.length)];
+            
+            // Posición horizontal aleatoria
+            petal.style.left = Math.random() * 100 + 'vw';
+            
+            // Tamaño aleatorio para dar profundidad (3D)
+            const size = 15 + Math.random() * 25;
+            petal.style.fontSize = size + 'px';
+            
+            // Retraso y duración de animación aleatorios para naturalidad
+            const duration = 6 + Math.random() * 6;
+            petal.style.animationDuration = duration + 's';
+            
+            // Difuminado aleatorio en el fondo
+            if (size < 22) {
+                petal.style.filter = 'blur(1px)';
+                petal.style.zIndex = '0'; // Pasan por detrás
+            } else {
+                petal.style.zIndex = '2'; // Pasan por delante
             }
+
+            body.appendChild(petal);
+
+            // Eliminar elemento después de que termine la animación
+            setTimeout(() => {
+                petal.remove();
+            }, duration * 1000);
         }
 
-        // Generación automática periódica
-        setInterval(dropElements, 3500);
+        // Generación continua de la animación floral
+        setInterval(createPetal, 400);
 
-        // Interacción
-        photo.addEventListener('click', dropElements);
-        photo.addEventListener('mouseenter', dropElements);
+        // Generación inicial para que la pantalla no empiece vacía
+        for(let i = 0; i < 10; i++) {
+            setTimeout(createPetal, Math.random() * 3000);
+        }
     </script>
 </body>
 </html>
