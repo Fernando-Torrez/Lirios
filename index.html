@@ -17,42 +17,46 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Playfair Display', serif;
-            /* Amanecer mágico en el prado: colores vibrantes de la naturaleza */
-            background: linear-gradient(180deg, #2b1022 0%, #52183c 30%, #a2396c 60%, #e07a5f 85%, #422131 100%);
+            /* Degradado de un prado al amanecer lleno de luz y vida */
+            background: linear-gradient(180deg, #1f0b18 0%, #4a1535 25%, #8c2f62 55%, #d96b62 80%, #ffb3a7 95%, #381625 100%);
             position: relative;
         }
 
-        /* --- DESTELLOS MÁGICOS DE SOL Y POLEN --- */
+        /* --- DESTELLOS DE LUZ Y POLEN BOTÁNICO --- */
         .sparkle {
             position: absolute;
-            background: radial-gradient(circle, rgba(255, 235, 180, 1) 0%, rgba(255, 182, 193, 0.5) 50%, transparent 70%);
+            background: radial-gradient(circle, #fff7d6 0%, #ffb3c6 50%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
-            z-index: 3;
-            animation: floatingPolen 8s ease-in-out infinite;
+            z-index: 6;
+            animation: floatingPolen 9s ease-in-out infinite;
         }
 
         @keyframes floatingPolen {
             0% { transform: translateY(105vh) translateX(0) scale(0.3); opacity: 0; }
-            30% { opacity: 0.8; }
-            70% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) translateX(50px) scale(1.2); opacity: 0; }
+            30% { opacity: 0.9; }
+            70% { opacity: 0.9; }
+            100% { transform: translateY(-10vh) translateX(80px) scale(1.4); opacity: 0; }
         }
 
-        /* --- CONTENEDOR DEL CAMPO VIVO DE LIRIOS --- */
+        /* --- PRADO INMERSIVO DE LIRIOS --- */
         .field-container {
             position: absolute;
-            bottom: -20px;
+            bottom: -30px;
             left: 0;
             width: 100%;
-            height: 55vh;
+            height: 65vh;
             pointer-events: none;
-            z-index: 5;
         }
+
+        /* Capas de profundidad para el efecto 3D */
+        .layer-back { z-index: 4; filter: brightness(0.7) blur(1px); opacity: 0.8; }
+        .layer-mid { z-index: 5; filter: brightness(0.9); }
+        .layer-front { z-index: 12; filter: drop-shadow(0 25px 35px rgba(0,0,0,0.6)); }
 
         .lily-flower {
             position: absolute;
-            bottom: -280px; /* Comienzan ocultos para emerger mágicamente */
+            bottom: -350px; /* Escondidos para el brote inicial */
             transform-origin: bottom center;
             opacity: 0;
             display: flex;
@@ -62,10 +66,9 @@
         .lily-svg {
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 10px 15px rgba(42, 16, 30, 0.4));
         }
 
-        /* --- TARJETA DE CRISTAL PREMIUM CON BORDES DE ORO --- */
+        /* --- TARJETA DE CRISTAL PREMIUM CON MARCO DE ORO --- */
         .message-container {
             position: absolute;
             top: 0;
@@ -82,30 +85,30 @@
         .poem-card {
             max-width: 620px;
             width: 100%;
-            background: rgba(42, 16, 30, 0.45);
+            background: rgba(31, 11, 24, 0.5);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 215, 0, 0.25); /* Fino borde dorado */
+            border: 1px solid rgba(255, 215, 0, 0.3);
             padding: 55px 45px;
-            border-radius: 20px;
-            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.65), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            box-shadow: 0 50px 130px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(255, 255, 255, 0.05);
             text-align: center;
             opacity: 0;
-            transform: translateY(50px);
+            transform: translateY(60px);
         }
 
         .card-icon {
             font-family: 'Cinzel', serif;
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             color: #ffd700;
             margin-bottom: 25px;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-            animation: pulseIcon 3s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+            animation: pulseIcon 3.5s ease-in-out infinite;
         }
 
         @keyframes pulseIcon {
             0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.1); opacity: 1; }
+            50% { transform: scale(1.12); opacity: 1; }
         }
 
         .main-phrase {
@@ -118,9 +121,9 @@
 
         .main-phrase span.highlight {
             font-style: italic;
-            color: #ffb3c6;
+            color: #ffccd5;
             font-weight: 600;
-            border-bottom: 1px dashed rgba(255, 179, 198, 0.5);
+            border-bottom: 1px dashed rgba(255, 204, 213, 0.6);
         }
 
         .signature {
@@ -128,11 +131,10 @@
             font-family: 'Cinzel', serif;
             font-size: 0.85rem;
             letter-spacing: 6px;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.65);
             font-weight: 600;
         }
 
-        /* Adaptabilidad para teléfonos móviles */
         @media (max-width: 600px) {
             .poem-card {
                 padding: 45px 25px;
@@ -142,20 +144,22 @@
                 line-height: 2.2;
             }
             .field-container {
-                height: 40vh;
+                height: 45vh;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="field-container" id="lilyField"></div>
+    <div class="field-container layer-back" id="fieldBack"></div>
+    <div class="field-container layer-mid" id="fieldMid"></div>
+    <div class="field-container layer-front" id="fieldFront"></div>
 
     <div class="message-container">
         <div class="poem-card" id="card">
             <div class="card-icon">⚜</div>
             <p class="main-phrase">
-                "Mel, dicen que en un campo infinito de lirios, cada flor compite en elegancia, blancura y perfección... Pero para mí el mundo se detiene contigo, porque ninguna de ellas posee la <span class="highlight">luz de tu mirada</span>, ni la pureza y dulzura que florece en tu sonrisa cada vez que te veo."
+                "Mel, dicen que en un campo infinito de lirios, cada flower compite en elegancia, blancura y perfección... Pero para mí el mundo se detiene contigo, porque ninguna de ellas posee la <span class="highlight">luz de tu mirada</span>, ni la pureza y dulzura que florece en tu sonrisa cada vez que te veo."
             </p>
             <div class="signature">Para mi persona especial — Fer</div>
         </div>
@@ -164,86 +168,103 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
-        const field = document.getElementById('lilyField');
-        const totalLilies = 26; // Campo denso y lleno
+        const totalLilies = 50; // ¡Población masiva para un campo real!
 
-        // Diseño SVG optimizado con degradados vivos internos (Rosa intenso, degradado blanco y hojas detalladas)
+        // SVG Avanzado: Diseño de Lirio Estilizado con puntos de textura internos y pistilos de contorno curvo
         const lilySVG = `
-            <svg class="lily-svg" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="lily-svg" viewBox="0 0 130 170" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="pinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#fff0f5"/>
-                        <stop offset="50%" stop-color="#ff758f"/>
-                        <stop offset="100%" stop-color="#c9184a"/>
+                    <linearGradient id="lilyPink" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" stop-color="#9d0208"/>
+                        <stop offset="40%" stop-color="#d00000"/>
+                        <stop offset="75%" stop-color="#ff85a1"/>
+                        <stop offset="100%" stop-color="#fff0f5"/>
                     </linearGradient>
-                    <linearGradient id="stemGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#52796f"/>
-                        <stop offset="100%" stop-color="#2f3e46"/>
+                    <linearGradient id="leafGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#4f772d"/>
+                        <stop offset="100%" stop-color="#132a13"/>
                     </linearGradient>
                 </defs>
 
-                <path d="M60 160 C60 120, 56 90, 62 55" stroke="url(#stemGradient)" stroke-width="4" stroke-linecap="round"/>
+                <path d="M65 170 C65 130, 61 95, 67 60" stroke="url(#leafGreen)" stroke-width="4.5" stroke-linecap="round"/>
                 
-                <path d="M60 130 C40 120, 15 125, 10 110 C18 95, 45 105, 60 122" fill="#354f52" opacity="0.95"/>
-                <path d="M60 95 C80 85, 105 90, 110 75 C102 62, 75 72, 60 90" fill="#354f52" opacity="0.95"/>
+                <path d="M65 135 C40 125, 10 130, 5 115 C15 98, 48 110, 65 127" fill="url(#leafGreen)"/>
+                <path d="M65 100 C90 90, 120 95, 125 80 C115 65, 85 75, 65 92" fill="url(#leafGreen)"/>
+                <path d="M65 145 C85 140, 110 145, 115 135 C105 122, 80 130, 65 138" fill="url(#leafGreen)" opacity="0.8"/>
+
+                <path d="M67 60 C20 40, 5 10, 15 2 C35 2, 50 25, 67 60 Z" fill="url(#lilyPink)"/>
+                <path d="M67 60 C114 40, 129 10, 119 2 C99 2, 84 25, 67 60 Z" fill="url(#lilyPink)"/>
+
+                <path d="M67 60 C40 25, 30 -10, 65 -18 C100 -10, 94 25, 67 60 Z" fill="url(#lilyPink)"/>
+                <path d="M67 60 C25 42, 15 8, 38 8 C50 22, 58 42, 67 60 Z" fill="url(#lilyPink)"/>
+                <path d="M67 60 C109 42, 119 8, 96 8 C84 22, 76 42, 67 60 Z" fill="url(#lilyPink)"/>
                 
-                <path d="M62 55 C25 38, 10 12, 18 2 C35 2, 48 25, 62 55 Z" fill="url(#pinkGradient)"/>
-                <path d="M62 55 C99 38, 114 12, 106 2 C89 2, 76 25, 62 55 Z" fill="url(#pinkGradient)"/>
+                <path d="M67 60 C45 75, 35 95, 65 105 C95 95, 89 75, 67 60 Z" fill="#ffccd5" opacity="0.95"/>
+
+                <circle cx="58" cy="45" r="1.2" fill="#5f0f40"/>
+                <circle cx="64" cy="40" r="1.5" fill="#5f0f40"/>
+                <circle cx="72" cy="46" r="1.2" fill="#5f0f40"/>
+                <circle cx="66" cy="50" r="1.3" fill="#5f0f40"/>
+                <circle cx="52" cy="35" r="1" fill="#5f0f40"/>
+                <circle cx="78" cy="35" r="1" fill="#5f0f40"/>
+
+                <path d="M65 60 C61 32, 50 18, 46 15" stroke="#dfb259" stroke-width="2.5" stroke-linecap="round"/>
+                <rect x="41" y="11" width="10" height="3" rx="1.5" transform="rotate(-20 41 11)" fill="#b5651d"/>
                 
-                <path d="M62 55 C40 25, 32 -8, 60 -15 C88 -8, 84 25, 62 55 Z" fill="url(#pinkGradient)"/>
-                <path d="M62 55 C32 38, 24 8, 42 8 C52 20, 56 38, 62 55 Z" fill="#ffb3c6" opacity="0.9"/>
-                <path d="M62 55 C92 38, 100 8, 82 8 C72 20, 68 38, 62 55 Z" fill="#ffb3c6" opacity="0.9"/>
+                <path d="M65 60 C66 30, 78 18, 82 14" stroke="#dfb259" stroke-width="2.5" stroke-linecap="round"/>
+                <rect x="78" y="10" width="10" height="3" rx="1.5" transform="rotate(20 78 10)" fill="#b5651d"/>
                 
-                <path d="M60 55 C58 32, 50 20, 48 18" stroke="#ffd700" stroke-width="2"/>
-                <circle cx="48" cy="18" r="3" fill="#ffd700"/>
-                <path d="M60 55 C62 30, 70 18, 74 16" stroke="#ffd700" stroke-width="2"/>
-                <circle cx="74" cy="16" r="3" fill="#ffd700"/>
+                <path d="M65 60 C65 26, 64 12, 64 8" stroke="#dfb259" stroke-width="2" stroke-linecap="round"/>
+                <rect x="59" y="5" width="10" height="3" rx="1.5" fill="#b5651d"/>
             </svg>
         `;
 
-        // Generación controlada del prado botánico
+        // Distribuir lirios en las capas correspondientes
         for (let i = 0; i < totalLilies; i++) {
             const lilyWrapper = document.createElement('div');
             lilyWrapper.className = 'lily-flower';
             lilyWrapper.innerHTML = lilySVG;
 
-            // Posicionamiento horizontal a lo largo del suelo
-            lilyWrapper.style.left = (Math.random() * 90) + 'vw';
+            // Posición horizontal aleatoria por toda la pantalla
+            lilyWrapper.style.left = (Math.random() * 92) + 'vw';
 
-            // Escala y altura asimétricas para dar profundidad de campo 3D
-            const h = 170 + Math.random() * 160;
-            const w = h * 0.75;
-            lilyWrapper.style.width = w + 'px';
-            lilyWrapper.style.height = h + 'px';
+            // Alturas variables para generar la perspectiva de horizonte del campo
+            const height = 150 + Math.random() * 180;
+            const width = height * 0.75;
+            lilyWrapper.style.width = width + 'px';
+            lilyWrapper.style.height = height + 'px';
 
-            // Manejo de capas de profundidad inteligente
-            if (h > 240) {
-                lilyWrapper.style.zIndex = '12'; // Pasan enfrente de la carta en primer plano
-                lilyWrapper.style.filter = 'drop-shadow(0 20px 35px rgba(0,0,0,0.5))';
+            // Asignación inteligente a su contenedor/capa según tamaño
+            let targetField;
+            if (height < 200) {
+                targetField = document.getElementById('fieldBack');
+            } else if (height >= 200 && height <= 270) {
+                targetField = document.getElementById('fieldMid');
             } else {
-                lilyWrapper.style.zIndex = '4';  // Detrás del cristal translúcido
-                lilyWrapper.style.opacity = '0.75';
-                lilyWrapper.style.filter = 'brightness(0.85) contrast(1.1)';
+                targetField = document.getElementById('fieldFront');
             }
+            targetField.appendChild(lilyWrapper);
 
-            field.appendChild(lilyWrapper);
+            // --- ANIMACIÓN DE CRECIMIENTO Y FLORACIÓN SIMULTÁNEA ---
+            const initialDelay = Math.random() * 2.2;
+            
+            // Inicializamos escala pequeña para que dé el efecto de brotar y abrirse
+            gsap.set(lilyWrapper, { scale: 0.4, transformOrigin: "bottom center" });
 
-            // --- ANIMACIÓN INTERNA 1: BROTAR DEL SUELO ---
-            const initialDelay = Math.random() * 1.8;
             gsap.to(lilyWrapper, {
-                bottom: '-15px',
+                bottom: '-10px',
+                scale: 1,
                 opacity: 1,
-                duration: 5,
+                duration: 5.5,
                 delay: initialDelay,
-                ease: "power4.out"
+                ease: "power3.out"
             });
 
-            // --- ANIMACIÓN INTERNA 2: VIENTO REALISTA ASÍNCRONO ---
-            // Balanceo sutil en rotación y eje horizontal para simular brisa real
+            // --- FÍSICA DE VIENTO NATURAL ASÍMETRICA ---
             gsap.to(lilyWrapper, {
                 rotation: () => (Math.random() * 5) + 3,
-                x: () => (Math.random() * 10) - 5,
-                duration: 3.5 + Math.random() * 3,
+                x: () => (Math.random() * 12) - 6,
+                duration: 4 + Math.random() * 3,
                 repeat: -1,
                 yoyo: true,
                 ease: "sine.inOut",
@@ -251,28 +272,31 @@
             });
         }
 
-        // --- ANIMACIÓN INTERNA 3: LLUVIA DE POLEN DORADO ---
+        // --- GENERADOR DE LUCIÉRNAGAS Y POLEN ---
         function generateSparkle() {
+            const layers = ['fieldBack', 'fieldMid', 'fieldFront'];
+            const randomLayer = document.getElementById(layers[Math.floor(Math.random() * layers.length)]);
+            
             const sparkle = document.createElement('div');
             sparkle.className = 'sparkle';
             
-            const size = 4 + Math.random() * 6;
+            const size = 4 + Math.random() * 7;
             sparkle.style.width = size + 'px';
             sparkle.style.height = size + 'px';
             sparkle.style.left = Math.random() * 100 + 'vw';
             
-            field.appendChild(sparkle);
-            setTimeout(() => { sparkle.remove(); }, 8000);
+            randomLayer.appendChild(sparkle);
+            setTimeout(() => { sparkle.remove(); }, 9000);
         }
-        setInterval(generateSparkle, 250);
+        setInterval(generateSparkle, 200);
 
-        // --- ANIMACIÓN INTERNA 4: APARICIÓN ELEGANTE DE LA TARJETA ---
+        // --- ENTRADA CINEMÁTICA DE LA CARTA ---
         gsap.to("#card", {
             opacity: 1,
             y: 0,
-            duration: 2.2,
-            delay: 0.8,
-            ease: "power3.out"
+            duration: 2.5,
+            delay: 1.2,
+            ease: "power4.out"
         });
     </script>
 </body>
