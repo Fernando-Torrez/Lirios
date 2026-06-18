@@ -4,274 +4,301 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Mel ⚜️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-cream: #fbf9f4;
-            --lily-white: #ffffff;
-            --leaf-green: #3d5245;
-            --soft-sage: #8fa89b;
-            --gold-accent: #cfb07b;
-            --text-main: #2c3531;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        body {
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0b1319;
             font-family: 'Playfair Display', serif;
-            min-height: 100vh;
+        }
+
+        /* Lienzo interactivo 3D */
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Capa superpuesta con degradado tierno de atardecer/amanecer en el prado */
+        .overlay-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(235, 201, 212, 0.4) 0%, rgba(139, 166, 149, 0.2) 60%, rgba(11, 19, 25, 0.8) 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Contenedor del mensaje flotante */
+        .message-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 30px;
-            background-color: var(--bg-cream);
-            /* Fondo con textura sutil orgánica */
-            background-image: radial-gradient(var(--soft-sage) 0.5px, transparent 0.5px), radial-gradient(var(--soft-sage) 0.5px, var(--bg-cream) 0.5px);
-            background-size: 40px 40px;
-            background-position: 0 0, 20px 20px;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* --- CONTENEDOR DE JARDÍN / LIENZO BOTÁNICO --- */
-        .canvas-container {
-            width: 100%;
-            max-width: 700px;
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid rgba(143, 168, 155, 0.3);
-            border-radius: 4px;
-            padding: 60px 50px;
-            box-shadow: 0 30px 70px rgba(61, 82, 69, 0.08);
-            position: relative;
-            z-index: 10;
             text-align: center;
+            background: rgba(11, 19, 25, 0.2);
         }
 
-        /* Esquinas ornamentales que simulan una carta antigua/botánica */
-        .canvas-container::before {
-            content: "";
-            position: absolute;
-            top: 15px; bottom: 15px; left: 15px; right: 15px;
-            border: 1px solid rgba(207, 176, 123, 0.4);
-            pointer-events: none;
+        .poem-card {
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 50px 40px;
             border-radius: 2px;
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.4);
+            animation: fadeInLetter 2.5s ease-out forwards;
         }
 
-        /* Ilustración minimalista de un Lirio mediante CSS */
-        .lily-brand {
+        .flower-symbol {
             font-family: 'Cinzel', serif;
-            font-size: 1.8rem;
-            color: var(--gold-accent);
-            letter-spacing: 4px;
-            margin-bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .lily-brand::after {
-            content: "";
-            width: 40px;
-            height: 1px;
-            background-color: var(--gold-accent);
-            display: block;
-        }
-
-        /* Título tipo caligrafía fluida */
-        .salutation {
-            font-family: 'Pinyon Script', cursive;
-            font-size: 5rem;
-            color: var(--leaf-green);
+            font-size: 2rem;
+            color: #ebd1a7;
+            letter-spacing: 2px;
             margin-bottom: 25px;
-            line-height: 1;
+            opacity: 0.9;
         }
 
-        /* Bloque del piropo de Lirios */
-        .lily-poetry {
-            font-size: 1.25rem;
-            line-height: 1.8;
-            color: var(--leaf-green);
+        .main-phrase {
+            font-size: 1.6rem;
+            line-height: 2.2;
+            color: #ffffff;
+            font-weight: 400;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .main-phrase span.highlight {
             font-style: italic;
-            margin-bottom: 40px;
-            padding: 0 20px;
-            position: relative;
+            color: #ebd1a7;
+            font-weight: 400;
         }
 
-        /* Cuerpo de la carta */
-        .letter-body {
-            font-size: 1.05rem;
-            line-height: 2;
-            color: var(--text-main);
-            text-align: justify;
-            margin-bottom: 30px;
-            letter-spacing: 0.3px;
-        }
-
-        .important-phrase {
-            color: var(--leaf-green);
-            font-weight: 600;
-            position: relative;
-            display: inline-block;
-        }
-
-        .important-phrase::after {
-            content: "";
-            position: absolute;
-            bottom: 2px; left: 0; right: 0;
-            height: 1px;
-            background-color: var(--gold-accent);
-            opacity: 0.7;
-        }
-
-        .divider-line {
-            width: 150px;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--soft-sage), transparent);
-            margin: 45px auto;
-        }
-
-        /* Despedida / Cierre */
-        .letter-footer {
-            margin-top: 20px;
-        }
-
-        .recipient-label {
+        .signature {
+            margin-top: 35px;
             font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            color: var(--soft-sage);
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.6);
             text-transform: uppercase;
-            display: block;
-            margin-bottom: 10px;
         }
 
-        .signature-name {
-            font-family: 'Pinyon Script', cursive;
-            font-size: 3.5rem;
-            color: var(--leaf-green);
-            line-height: 1;
+        @keyframes fadeInLetter {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- ANIMACIÓN ESTILIZADA DE PÉTALOS BLANCOS CAYENDO --- */
-        .petal-node {
-            position: fixed;
-            pointer-events: none;
-            z-index: 1;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(253,245,230,0.6) 100%);
-            border-radius: 0 100% 0 100%; /* Forma orgánica de pétalo de lirio */
-            box-shadow: inset -2px -2px 5px rgba(239,223,191,0.2), 0 5px 15px rgba(0,0,0,0.03);
-            animation: fallAnimation 12s linear infinite;
-        }
-
-        @keyframes fallAnimation {
-            0% {
-                transform: translateY(-10vh) rotate(0deg) skewX(0deg) scale(0.6);
-                opacity: 0;
-            }
-            15% { opacity: 1; }
-            90% { opacity: 0.9; }
-            100% {
-                transform: translateY(110vh) rotate(540deg) skewX(20deg) scale(1.1);
-                opacity: 0;
-            }
-        }
-
-        /* Adaptación móvil */
         @media (max-width: 600px) {
-            .canvas-container {
+            .poem-card {
                 padding: 40px 25px;
             }
-            .salutation {
-                font-size: 3.8rem;
-            }
-            .lily-poetry {
-                font-size: 1.1rem;
-                padding: 0;
-            }
-            .signature-name {
-                font-size: 2.8rem;
+            .main-phrase {
+                font-size: 1.25rem;
+                line-height: 2;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="canvas-container">
-        <div class="lily-brand">⚜</div>
-        
-        <h1 class="salutation">Mel</h1>
-        
-        <p class="lily-poetry">
-            "Dicen que los lirios son capaces de iluminar cualquier espacio con su sola presencia, destilando una elegancia que silencia al resto del jardín... Justo eso me pasa contigo; contemplar tu sonrisa es recordar la belleza más pura y sincera de la vida."
-        </p>
-        
-        <p class="letter-body">
-            <span class="important-phrase">Perdón por casi arruinarlo</span>. Por un instante sentí la fragilidad de la distancia y el temor de perder a una persona tan genuina e importante debido a un simple malentendido.
-        </p>
+    <div id="canvas-container"></div>
+    <div class="overlay-gradient"></div>
 
-        <p class="letter-body">
-            Quiero que sepa, con toda la honestidad del mundo, que <span class="important-phrase">mi interés hacia usted es real</span>, transparente y con las intenciones más nobles. El afecto y la admiración que me inspira permanecen intactos, y espero que me conceda la oportunidad de seguir demostrándoselo día con día.
-        </p>
-
-        <div class="divider-line"></div>
-
-        <footer class="letter-footer">
-            <span class="recipient-label">Para mi persona especial</span>
-            <span class="signature-name">Con sincero cariño, Fer</span>
-        </footer>
+    <div class="message-wrapper">
+        <div class="poem-card">
+            <div class="flower-symbol">⚜</div>
+            <p class="main-phrase">
+                "Mel, dicen que en un campo infinito de lirios, cada flor compite en elegancia, blancura y perfección... Pero para mí el mundo se detiene contigo, porque ninguna de ellas posee la <span class="highlight">luz de tu mirada</span>, ni la pureza y dulzura que florece en tu sonrisa cada vez que te veo."
+            </p>
+            <div class="signature">Para mi persona especial — Fer</div>
+        </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script>
-        const totalPetals = 20;
-        const bodyNode = document.body;
+        // --- CONFIGURACIÓN DE THREE.JS ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        
+        // Cámara
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 30;
+        camera.position.y = 5;
 
-        function spawnPetal() {
-            const petal = document.createElement('div');
-            petal.className = 'petal-node';
+        // Renderizador
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        // --- CREACIÓN DEL CAMPO 3D (LIRIOS / PÉTALOS / LUCES) ---
+        // Geometría base para simular pétalos estilizados de lirio (forma alargada)
+        const petalGeometry = new THREE.ConeGeometry(0.4, 1.8, 3);
+        petalGeometry.rotateX(Math.PI / 3); // Inclinación orgánica
+
+        // Material suave, reactivo a la luz, color blanco lirio / crema rosado
+        const petalMaterial = new THREE.MeshLambertMaterial({
+            color: 0xfff5f5,
+            emissive: 0x221115,
+            side: THREE.DoubleSide
+        });
+
+        const instancedMesh = new THREE.InstancedMesh(petalGeometry, petalMaterial, 400);
+        
+        // Distribuimos los pétalos y "lirios flotantes" de manera aleatoria en un espacio tridimensional
+        const dummy = new THREE.Object3D();
+        const petalData = [];
+
+        for (let i = 0; i < 400; i++) {
+            const x = (Math.random() - 0.5) * 80;
+            const y = (Math.random() - 0.5) * 40 - 5;
+            const z = (Math.random() - 0.5) * 60;
             
-            // Tamaños variables para imitar la naturaleza de un lirio
-            const width = 15 + Math.random() * 20; 
-            const height = width * (1.8 + Math.random() * 0.7); // Alargados como los lirios
+            dummy.position.set(x, y, z);
+            dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
             
-            petal.style.width = width + 'px';
-            petal.style.height = height + 'px';
-            
-            // Posición horizontal
-            petal.style.left = Math.random() * 100 + 'vw';
-            
-            // Tiempos aleatorios para fluidez
-            const duration = 8 + Math.random() * 8;
-            petal.style.animationDuration = duration + 's';
-            petal.style.animationDelay = Math.random() * 5 + 's';
-            
-            // Efecto de profundidad difuminando pétalos lejanos
-            if(width < 22) {
-                petal.style.filter = 'blur(1.5px)';
-                petal.style.zIndex = '1';
-            } else {
-                petal.style.zIndex = '11'; /* Pasan elegantemente sobre la carta */
+            // Tamaños variados
+            const scale = 0.6 + Math.random() * 0.8;
+            dummy.scale.set(scale, scale, scale);
+            dummy.updateMatrix();
+            instancedMesh.setMatrixAt(i, dummy.matrix);
+
+            // Almacenamos velocidades individuales para la animación fluida
+            petalData.push({
+                x: x, y: y, z: z,
+                rX: dummy.rotation.x,
+                rY: dummy.rotation.y,
+                speedY: 0.02 + Math.random() * 0.03,
+                speedRot: 0.005 + Math.random() * 0.01,
+                wobble: Math.random() * 10
+            });
+        }
+        scene.add(instancedMesh);
+
+        // Partículas brillantes que simulan luciérnagas y el polen dorado de los lirios
+        const particleGeo = new THREE.BufferGeometry();
+        const particleCount = 250;
+        const posArray = new Float32Array(particleCount * 3);
+
+        for(let i=0; i < particleCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 70;
+        }
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        // Material para los brillos dorados del campo
+        const particleMat = new THREE.PointsMaterial({
+            size: 0.18,
+            color: 0xdfb259,
+            transparent: true,
+            opacity: 0.8
+        });
+        const fireflies = new THREE.Points(particleGeo, particleMat);
+        scene.add(fireflies);
+
+        // Iluminación del prado nocturno/romántico
+        const ambientLight = new THREE.AmbientLight(0x4a5568, 1.2);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffe3e0, 1.5);
+        directionalLight.position.set(5, 15, 10);
+        scene.add(directionalLight);
+
+        const pointLight = new THREE.PointLight(0xdfb259, 1, 50);
+        pointLight.position.set(0, 0, 10);
+        scene.add(pointLight);
+
+        // --- INTERACTIVIDAD CON EL MOUSE / DEDO ---
+        let mouseX = 0;
+        let mouseY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) - 0.5;
+            mouseY = (e.clientY / window.innerHeight) - 0.5;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if(e.touches.length > 0) {
+                mouseX = (e.touches[0].clientX / window.innerWidth) - 0.5;
+                mouseY = (e.touches[0].clientY / window.innerHeight) - 0.5;
             }
+        });
 
-            bodyNode.appendChild(petal);
+        // --- BUCLE DE ANIMACIÓN (FÍSICAS DEL CAMPO FLUIDO) ---
+        const clock = new THREE.Clock();
 
-            // Remoción limpia tras terminar ciclo
-            setTimeout(() => {
-                petal.remove();
-            }, (duration + 5) * 1000);
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const elapsedTime = clock.getElapsedTime();
+
+            // Reacción suave de la cámara al movimiento
+            camera.position.x += (mouseX * 15 - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY * 8 + 5 - camera.position.y) * 0.05;
+            camera.lookAt(0, 2, 0);
+
+            // Mover las partículas de polen/luciérnagas mágicamente
+            const positions = fireflies.geometry.attributes.position.array;
+            for(let i = 1; i < positions.length; i += 3) {
+                positions[i] -= 0.015; // Caen despacio
+                if(positions[i] < -20) positions[i] = 20; // Reaparecen arriba
+            }
+            fireflies.geometry.attributes.position.needsUpdate = true;
+
+            // Animación cíclica de los pétalos de lirio
+            for (let i = 0; i < 400; i++) {
+                const data = petalData[i];
+                data.y -= data.speedY;
+                data.rX += data.speedRot;
+                data.rY += data.speedRot * 0.5;
+                
+                // Efecto zig-zag natural por el viento del prado
+                const currentX = data.x + Math.sin(elapsedTime + data.wobble) * 0.5;
+
+                // Reiniciar pétalo si sale del campo visual inferior
+                if (data.y < -25) {
+                    data.y = 25;
+                    data.x = (Math.random() - 0.5) * 80;
+                }
+
+                dummy.position.set(currentX, data.y, data.z);
+                dummy.rotation.set(data.rX, data.rY, 0);
+                dummy.updateMatrix();
+                instancedMesh.setMatrixAt(i, dummy.matrix);
+            }
+            instancedMesh.instanceMatrix.needsUpdate = true;
+
+            renderer.render(scene, camera);
         }
 
-        // Generar ciclo constante
-        setInterval(spawnPetal, 600);
+        animate();
 
-        // Poblado inicial
-        for(let i = 0; i < totalPetals; i++) {
-            setTimeout(spawnPetal, Math.random() * 4000);
-        }
+        // Ajuste dinámico de pantalla (Responsive total)
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
     </script>
 </body>
 </html>
