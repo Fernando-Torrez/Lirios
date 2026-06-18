@@ -6,14 +6,6 @@
     <title>Para Mel ⚜️</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --night-sky: #0d1b2a;
-            --field-dark: #1b263b;
-            --lily-white: #ffffff;
-            --lily-blush: #fae1dd;
-            --gold-glow: rgba(224, 169, 109, 0.4);
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -24,205 +16,113 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: linear-gradient(to bottom, var(--night-sky) 0%, var(--field-dark) 100%);
+            background-color: #1a0f13; /* Fondo base profundo y elegante */
             font-family: 'Playfair Display', serif;
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Atmósfera de campo real al amanecer/atardecer rosado */
+        .field-atmosphere {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                rgba(24bc, 203, 212, 0.45) 0%, 
+                rgba(255, 202, 212, 0.3) 50%, 
+                rgba(58, 43, 49, 0.85) 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Tarjeta de cristal para el mensaje poético */
+        .message-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        /* --- CONTENEDOR DEL MENSAJE FLOTANTE --- */
-        .message-wrapper {
-            position: relative;
-            z-index: 100; /* Asegura que el texto esté siempre al frente de las flores */
-            padding: 20px;
-            width: 100%;
-            max-width: 650px;
-            text-align: center;
+            padding: 25px;
+            pointer-events: none; /* Permite interactuar con el fondo */
         }
 
         .poem-card {
-            background: rgba(13, 27, 42, 0.65);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            max-width: 620px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 50px 40px;
-            border-radius: 4px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-            animation: fadeInCard 2s ease-out forwards;
+            border-radius: 8px;
+            box-shadow: 0 30px 100px rgba(26, 15, 19, 0.5);
+            text-align: center;
+            pointer-events: auto; /* Activa clicks solo en la tarjeta */
+            opacity: 0;
+            transform: translateY(30px);
         }
 
         .flower-symbol {
             font-family: 'Cinzel', serif;
-            font-size: 2rem;
-            color: #e0a96d;
+            font-size: 1.8rem;
+            color: #ffe5ec;
+            letter-spacing: 2px;
             margin-bottom: 25px;
-            animation: floatSymbol 4s ease-in-out infinite;
         }
 
         .main-phrase {
-            font-size: 1.55rem;
+            font-size: 1.5rem;
             line-height: 2.3;
             color: #ffffff;
             font-weight: 400;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.4);
         }
 
         .main-phrase span.highlight {
             font-style: italic;
-            color: #e0a96d;
-            position: relative;
+            color: #ffb7b2;
+            font-weight: 500;
         }
 
         .signature {
-            margin-top: 40px;
+            margin-top: 35px;
             font-family: 'Cinzel', serif;
             font-size: 0.8rem;
             letter-spacing: 4px;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.6);
             text-transform: uppercase;
-        }
-
-        /* --- ANIMACIONES DEL TEXTO --- */
-        @keyframes fadeInCard {
-            0% { opacity: 0; transform: translateY(40px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes floatSymbol {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-5px) scale(1.05); }
-        }
-
-        /* --- ANIMACIÓN MÁGICA: LIRIOS CRECIENDO DEL SUELO --- */
-        .field-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .lily-flower {
-            position: absolute;
-            bottom: -50px; /* Comienzan ocultos abajo */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform-origin: bottom center;
-            animation: growFromGround 14s ease-in-out infinite;
-            opacity: 0;
-        }
-
-        /* Tallo del lirio */
-        .lily-stem {
-            width: 3px;
-            height: 180px;
-            background: linear-gradient(to top, #1e352f, #3a5a40);
-            box-shadow: 0 0 10px rgba(58, 90, 64, 0.3);
-        }
-
-        /* Cabeza/Pétalos del lirio estilizados */
-        .lily-head {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            margin-bottom: -5px;
-        }
-
-        .petal {
-            position: absolute;
-            background: linear-gradient(135deg, var(--lily-white) 0%, var(--lily-blush) 100%);
-            border-radius: 0 100% 0 100%;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
-        }
-
-        /* Formación de la flor abriéndose */
-        .petal-left {
-            width: 25px;
-            height: 45px;
-            left: -10px;
-            transform: rotate(-35deg);
-        }
-
-        .petal-right {
-            width: 25px;
-            height: 45px;
-            right: -10px;
-            transform: rotate(35deg);
-        }
-
-        .petal-center {
-            width: 24px;
-            height: 50px;
-            left: 8px;
-            top: -10px;
-            transform: scaleX(0.9);
-            filter: drop-shadow(0 0 8px var(--gold-glow));
-        }
-
-        /* Animación para que broten, se mezan en el viento y bajen de nuevo de forma fluida */
-        @keyframes growFromGround {
-            0% {
-                transform: translateY(150px) scale(0.3) rotate(0deg);
-                opacity: 0;
-            }
-            15% {
-                opacity: 0.75;
-            }
-            30%, 70% {
-                transform: translateY(-120px) scale(1) rotate(5deg); /* Crecido y balanceándose hacia un lado */
-                opacity: 0.85;
-            }
-            50% {
-                transform: translateY(-120px) scale(1) rotate(-5deg); /* Balanceo continuo por el viento */
-                opacity: 0.85;
-            }
-            85% {
-                opacity: 0.2;
-            }
-            100% {
-                transform: translateY(-300px) scale(0.7) rotate(0deg); /* Se desvanecen ascendiendo sutilmente hacia el cielo */
-                opacity: 0;
-            }
-        }
-
-        /* --- DESTELLOS DE LUZ EN EL CAMPO (POLEN MÁGICO) --- */
-        .sparkle {
-            position: absolute;
-            bottom: 0;
-            background: radial-gradient(circle, #fff 20%, rgba(224, 169, 109, 0.8) 60%, transparent 100%);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: riseUp 10s linear infinite;
-            opacity: 0;
-        }
-
-        @keyframes riseUp {
-            0% { transform: translateY(10vh) scale(0.5); opacity: 0; }
-            20% { opacity: 0.8; }
-            80% { opacity: 0.8; }
-            100% { transform: translateY(-105vh) scale(1.3); opacity: 0; }
         }
 
         @media (max-width: 600px) {
             .poem-card {
-                padding: 40px 25px;
+                padding: 35px 20px;
             }
             .main-phrase {
-                font-size: 1.25rem;
-                line-height: 2.1;
+                font-size: 1.2rem;
+                line-height: 2;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="field-container" id="field"></div>
+    <div id="canvas-container"></div>
+    <div class="field-atmosphere"></div>
 
     <div class="message-wrapper">
-        <div class="poem-card">
+        <div class="poem-card" id="card">
             <div class="flower-symbol">⚜</div>
             <p class="main-phrase">
                 "Mel, dicen que en un campo infinito de lirios, cada flor compite en elegancia, blancura y perfección... Pero para mí el mundo se detiene contigo, porque ninguna de ellas posee la <span class="highlight">luz de tu mirada</span>, ni la pureza y dulzura que florece en tu sonrisa cada vez que te veo."
@@ -231,86 +131,205 @@
         </div>
     </div>
 
-    <script>
-        const field = document.getElementById('field');
-        const maxLilies = 18;
-        const maxSparkles = 30;
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-        // Generador de Lirios del Suelo
-        function spawnLily() {
-            const lily = document.createElement('div');
-            lily.className = 'lily-flower';
-            
-            // Estructura de pétalos y tallo
-            lily.innerHTML = `
-                <div class="lily-head">
-                    <div class="petal petal-left"></div>
-                    <div class="petal petal-right"></div>
-                    <div class="petal petal-center"></div>
-                </div>
-                <div class="lily-stem"></div>
-            `;
-            
-            // Distribución aleatoria por el suelo horizontal
-            lily.style.left = Math.random() * 95 + 'vw';
-            
-            // Variación de escala para crear profundidad (unas más lejos, otras más cerca)
-            const scale = 0.5 + Math.random() * 0.8;
-            lily.style.transform = `scale(${scale})`;
-            
-            // Ajustamos el z-index basado en el tamaño para realismo visual
-            if(scale > 0.9) {
-                lily.style.zIndex = '110'; // Delante de la carta sutilmente en las esquinas
-                lily.style.filter = 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))';
-            } else {
-                lily.style.zIndex = '5';   // Detrás de la carta de cristal
-                lily.style.opacity = '0.5';
+    <script>
+        // --- CONFIGURACIÓN DE LA ESCENA 3D ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 6, 28);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // --- ILUMINACIÓN DEL PRADO ---
+        const ambientLight = new THREE.AmbientLight(0xffe5ec, 0.9);
+        scene.add(ambientLight);
+
+        const pinkSunLight = new THREE.DirectionalLight(0xffcad4, 1.8);
+        pinkSunLight.position.set(10, 20, 10);
+        scene.add(pinkSunLight);
+
+        const rimLight = new THREE.PointLight(0xffb7b2, 1.5, 40);
+        rimLight.position.set(0, -2, 10);
+        scene.add(rimLight);
+
+        // --- MODELADO PROCEDURAL DE UN LIRIO REALISTA ---
+        function createLilyMesh() {
+            const lilyGroup = new THREE.Group();
+
+            // Tallo (Curva orgánica)
+            const stemMaterial = new THREE.MeshLambertMaterial({ color: 0x2d4a3e });
+            const stemGeometry = new THREE.CylinderGeometry(0.08, 0.14, 12, 8);
+            stemGeometry.translate(0, 6, 0);
+            const stem = new THREE.Mesh(stemGeometry, stemMaterial);
+            lilyGroup.add(stem);
+
+            // Pétalos de Lirio (Modelado curvo usando planos deformados matemáticamente)
+            const petalMat = new THREE.MeshStandardMaterial({
+                color: 0xffcad4, // Rosado principal
+                roughness: 0.3,
+                metalness: 0.1,
+                side: THREE.DoubleSide,
+                emissive: 0x4a2830
+            });
+
+            // Geometría orgánica alargada del pétalo del lirio
+            const petalGeo = new THREE.ConeGeometry(0.6, 2.5, 4, 16);
+            petalGeo.scale(1, 1, 0.15); // Volverlo plano y estilizado
+            petalGeo.translate(0, 1.25, 0);
+
+            const petals = [];
+            const numPetals = 6;
+
+            for (let i = 0; i < numPetals; i++) {
+                const petalMesh = new THREE.Mesh(petalGeo, petalMat);
+                const angle = (i / numPetals) * Math.PI * 2;
+                
+                // Distribución radial del botón del lirio
+                petalMesh.position.set(0, 12, 0);
+                petalMesh.rotation.z = angle;
+                petalMesh.rotation.x = 0.5; // Apertura inicial hacia afuera
+                petalMesh.rotation.y = 0;
+                
+                petalMesh.scale.set(0, 0, 0); // Iniciamos escala cero para animar el brote
+                lilyGroup.add(petalMesh);
+                petals.push(petalMesh);
             }
 
-            // Duraciones y retrasos asíncronos para que broten a destiempo
-            const duration = 12 + Math.random() * 6;
-            lily.style.animationDuration = duration + 's';
-
-            field.appendChild(lily);
-
-            // Limpieza y reciclaje del elemento al completar el ciclo
-            setTimeout(() => {
-                lily.remove();
-            }, duration * 1000);
+            // Guardamos referencias para la animación
+            lilyGroup.userData = { petals: petals, stem: stem };
+            return lilyGroup;
         }
 
-        // Generador de Polvo Dorado / Destellos del Prado
-        function spawnSparkle() {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
+        // --- POBLAR EL CAMPO DE LIRIOS ---
+        const lilies = [];
+        const numLilies = 35;
+
+        for (let i = 0; i < numLilies; i++) {
+            const lily = createLilyMesh();
             
-            const size = 3 + Math.random() * 5;
-            sparkle.style.width = size + 'px';
-            sparkle.style.height = size + 'px';
-            sparkle.style.left = Math.random() * 100 + 'vw';
+            // Dispersión real por el suelo en cuadriculado natural
+            const x = (Math.random() - 0.5) * 60;
+            const z = (Math.random() - 0.5) * 30 - 5;
+            const yPositionIncial = -22 - Math.random() * 5; // Ocultos bajo el suelo inicial
+
+            lily.position.set(x, yPositionIncial, z);
             
-            const duration = 6 + Math.random() * 6;
-            sparkle.style.animationDuration = duration + 's';
-            sparkle.style.animationDelay = Math.random() * 4 + 's';
+            // Tamaños con perspectiva natural
+            const scaleFactor = 0.7 + Math.random() * 0.6;
+            lily.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-            field.appendChild(sparkle);
+            scene.add(lily);
+            lilies.push(lily);
 
-            setTimeout(() => {
-                sparkle.remove();
-            }, (duration + 4) * 1000);
+            // ANIMACIÓN DE CRECIMIENTO INDIVIDUAL (GSAP)
+            const delayTime = Math.random() * 3.5;
+
+            // 1. El tallo sube desde la tierra
+            gsap.to(lily.position, {
+                y: -8 + (Math.random() * 3), // Altura final visible
+                duration: 5,
+                delay: delayTime,
+                ease: "power2.out"
+            });
+
+            // 2. Los pétalos rosados crecen y se abren majestuosamente
+            lily.userData.petals.forEach((p, index) => {
+                gsap.to(p.scale, {
+                    x: 1, y: 1, z: 1,
+                    duration: 4,
+                    delay: delayTime + 2.5 + (index * 0.1),
+                    ease: "back.out(1.5)"
+                });
+                // Movimiento sutil de apertura del pétalo
+                gsap.to(p.rotation, {
+                    x: 0.9,
+                    duration: 4,
+                    delay: delayTime + 2.5,
+                    ease: "power1.out"
+                });
+            });
         }
 
-        // Inicialización y bucle continuo del jardín en crecimiento
-        setInterval(spawnLily, 900);
-        setInterval(spawnSparkle, 400);
+        // --- PARTÍCULAS MÁGICAS / LUCIÉRNAGAS DE POLEN ---
+        const particleGeo = new THREE.BufferGeometry();
+        const pCount = 120;
+        const posArray = new Float32Array(pCount * 3);
 
-        // Población inicial rápida para que no comience vacío
-        for (let i = 0; i < 8; i++) {
-            setTimeout(spawnLily, Math.random() * 5000);
+        for(let i=0; i<pCount*3; i+=3) {
+            posArray[i] = (Math.random() - 0.5) * 50;
+            posArray[i+1] = Math.random() * 20 - 10;
+            posArray[i+2] = (Math.random() - 0.5) * 30;
         }
-        for (let i = 0; i < 15; i++) {
-            setTimeout(spawnSparkle, Math.random() * 3000);
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particleMat = new THREE.PointsMaterial({
+            size: 0.15,
+            color: 0xffe5ec,
+            transparent: true,
+            opacity: 0.7
+        });
+        const glowParticles = new THREE.Points(particleGeo, particleMat);
+        scene.add(glowParticles);
+
+        // --- ANIMACIÓN DE ENTRADA DE LA TARJETA ---
+        gsap.to("#card", {
+            opacity: 1,
+            y: 0,
+            duration: 2,
+            delay: 1.5,
+            ease: "power3.out"
+        });
+
+        // --- INTERACTIVIDAD (MOVIMIENTO DE LA CÁMARA CON EL MOUSE) ---
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) - 0.5;
+            mouseY = (e.clientY / window.innerHeight) - 0.5;
+        });
+
+        // --- BUCLE DE RENDERIZADO Y EFECTO VIENTO ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+
+            // Movimiento suave de la cámara siguiendo el mouse
+            camera.position.x += (mouseX * 12 - camera.position.x) * 0.03;
+            camera.position.y += (-mouseY * 6 + 6 - camera.position.y) * 0.03;
+            camera.lookAt(0, 3, 0);
+
+            // Simulación física del viento sobre el prado de lirios
+            lilies.forEach((lily, idx) => {
+                const wave = Math.sin(time + (idx * 0.5)) * 0.04;
+                lily.rotation.z = wave;
+                lily.rotation.x = wave * 0.5;
+            });
+
+            // Ascenso constante del polen brillante flotante
+            const positions = glowParticles.geometry.attributes.position.array;
+            for(let i = 1; i < positions.length; i += 3) {
+                positions[i] += 0.02; // Sube despacio hacia el cielo
+                if(positions[i] > 15) positions[i] = -10; // Ciclo continuo desde abajo
+            }
+            glowParticles.geometry.attributes.position.needsUpdate = true;
+
+            renderer.render(scene, camera);
         }
+        animate();
+
+        // Responsive completo
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
     </script>
 </body>
 </html>
