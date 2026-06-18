@@ -17,42 +17,42 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Playfair Display', serif;
-            /* Fondo base con los colores del amanecer en el prado */
-            background: linear-gradient(180deg, #23091a 0%, #4a1231 35%, #802251 70%, #cc5a52 90%, #ff9e80 100%);
+            /* Fondo de prado crepuscular vibrante */
+            background: linear-gradient(180deg, #180512 0%, #380e25 30%, #6e1a47 60%, #b84f54 85%, #e68a75 100%);
             position: relative;
         }
 
-        /* --- DESTELLOS MÁGICOS Y POLEN --- */
+        /* --- DESTELLOS DE LUZ Y POLEN --- */
         .sparkle {
             position: absolute;
-            background: radial-gradient(circle, #fff2cc 0%, #ffb3c6 55%, transparent 70%);
+            background: radial-gradient(circle, #fff3cd 0%, #ffb3c6 50%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 10;
-            animation: floatingPolen 9s ease-in-out infinite;
+            animation: floatingPolen 10s ease-in-out infinite;
         }
 
         @keyframes floatingPolen {
             0% { transform: translateY(105vh) translateX(0) scale(0.3); opacity: 0; }
-            30% { opacity: 0.85; }
-            70% { opacity: 0.85; }
-            100% { transform: translateY(-10vh) translateX(70px) scale(1.3); opacity: 0; }
+            30% { opacity: 0.8; }
+            70% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) translateX(100px) scale(1.3); opacity: 0; }
         }
 
-        /* --- LA CAMA DE LIRIOS (CUBRE TODA LA PANTALLA) --- */
-        .cama-de-lirios {
+        /* --- LA CAMA DE LIRIOS (FONDO TOTAL) --- */
+        .field-background {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1; /* Se queda estrictamente detrás de la tarjeta de texto */
+            z-index: 1; /* Todo el campo se queda estrictamente por detrás */
         }
 
         .lily-flower {
             position: absolute;
-            transform-origin: center bottom;
+            transform-origin: bottom center;
             opacity: 0;
             display: flex;
             justify-content: center;
@@ -63,14 +63,14 @@
             height: 100%;
         }
 
-        /* --- CONTENEDOR DEL TEXTO AL FRENTE --- */
+        /* --- CONTENEDOR SUPERIOR DEL TEXTO (INMUNE A BLOQUEOS) --- */
         .message-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 100; /* Prioridad absoluta al frente */
+            z-index: 100; /* Prioridad absoluta frente a las flores */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -80,16 +80,31 @@
         .poem-card {
             max-width: 620px;
             width: 100%;
-            background: rgba(26, 6, 19, 0.68); /* Cristal oscuro para que el texto resalte sobre el fondo de flores */
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 215, 0, 0.35); /* Fino borde de oro */
+            background: rgba(24, 5, 18, 0.65); /* Un velo de cristal oscuro para contraste perfecto */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.35);
             padding: 55px 45px;
-            border-radius: 20px;
-            box-shadow: 0 50px 130px rgba(0, 0, 0, 0.85), inset 0 0 30px rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            box-shadow: 0 50px 130px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.05);
             text-align: center;
+            position: relative;
+            overflow: hidden;
             opacity: 0;
             transform: translateY(40px);
+        }
+
+        /* --- MARCA DE AGUA BOTÁNICA INTERNA --- */
+        .watermark-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            height: 85%;
+            z-index: -1; /* Detrás del texto interior */
+            opacity: 0.06; /* Suave y sutil como marca de agua */
+            pointer-events: none;
         }
 
         .card-icon {
@@ -137,10 +152,13 @@
 </head>
 <body>
 
-    <div class="cama-de-lirios" id="camaLirios"></div>
+    <div class="field-background" id="lilyField"></div>
 
     <div class="message-container">
         <div class="poem-card" id="card">
+            
+            <div class="watermark-bg" id="watermark"></div>
+
             <div class="card-icon">⚜</div>
             <p class="main-phrase">
                 "Mel, dicen que en un campo infinito de lirios, cada flor compite en elegancia, blancura y perfección... Pero para mí el mundo se detiene contigo, porque ninguna de ellas posee la <span class="highlight">luz de tu mirada</span>, ni la pureza y dulzura que florece en tu sonrisa cada vez que te veo."
@@ -152,19 +170,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
-        const cama = document.getElementById('camaLirios');
-        
-        // Cantidad de lirios necesarios para tapizar el fondo completo
-        const columnas = 8;
-        const filas = 5;
-        const totalFlores = columnas * filas;
+        const field = document.getElementById('lilyField');
+        const watermarkContainer = document.getElementById('watermark');
+        const totalLilies = 45; // Cantidad perfecta para tapizar el fondo
 
-        // El SVG botánico hermoso con pecas y pistilos dorados detallados
-        const lirioBotánicoSVG = `
+        // Diseño Vectorial Avanzado y Realista del Lirio Rosado
+        const lilySVG = `
             <svg class="lily-svg" viewBox="0 0 130 170" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="lilyPink" x1="0%" y1="100%" x2="0%" y2="0%">
-                        <stop offset="0%" stop-color="#7a0926"/>
+                        <stop offset="0%" stop-color="#800f2f"/>
                         <stop offset="35%" stop-color="#ff4d6d"/>
                         <stop offset="75%" stop-color="#ffb3c1"/>
                         <stop offset="100%" stop-color="#fff0f5"/>
@@ -174,8 +189,7 @@
                         <stop offset="100%" stop-color="#132a13"/>
                     </linearGradient>
                 </defs>
-                
-                <path d="M65 170 C65 130, 61 95, 67 60" stroke="url(#leafGreen)" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M65 170 C65 130, 61 95, 67 60" stroke="url(#leafGreen)" stroke-width="4" stroke-linecap="round"/>
                 <path d="M65 135 C40 125, 10 130, 5 115 C15 98, 48 110, 65 127" fill="url(#leafGreen)"/>
                 <path d="M65 100 C90 90, 120 95, 125 80 C115 65, 85 75, 65 92" fill="url(#leafGreen)"/>
                 
@@ -184,14 +198,12 @@
                 <path d="M67 60 C40 25, 30 -10, 65 -18 C100 -10, 94 25, 67 60 Z" fill="url(#lilyPink)"/>
                 <path d="M67 60 C25 42, 15 8, 38 8 C50 22, 58 42, 67 60 Z" fill="url(#lilyPink)"/>
                 <path d="M67 60 C109 42, 119 8, 96 8 C84 22, 76 42, 67 60 Z" fill="url(#lilyPink)"/>
-                <path d="M67 60 C45 75, 35 95, 65 105 C95 95, 89 75, 67 60 Z" fill="#ffccd5" opacity="0.95"/>
+                <path d="M67 60 C45 75, 35 95, 65 105 C95 95, 89 75, 67 60 Z" fill="#ffccd5" opacity="0.9"/>
 
                 <circle cx="64" cy="40" r="1.5" fill="#4a001f"/>
                 <circle cx="58" cy="45" r="1.2" fill="#4a001f"/>
                 <circle cx="72" cy="46" r="1.2" fill="#4a001f"/>
                 <circle cx="66" cy="50" r="1.3" fill="#4a001f"/>
-                <circle cx="53" cy="38" r="1" fill="#4a001f"/>
-                <circle cx="77" cy="38" r="1" fill="#4a001f"/>
 
                 <path d="M65 60 C61 32, 50 18, 46 15" stroke="#dfb259" stroke-width="2.5"/>
                 <rect x="41" y="11" width="10" height="3" rx="1.5" transform="rotate(-20 41 11)" fill="#7a3400"/>
@@ -200,63 +212,65 @@
             </svg>
         `;
 
-        // Generar un tapiz perfecto por toda la cuadrícula de la pantalla
-        for (let f = 0; f < filas; f++) {
-            for (let c = 0; c < columnas; c++) {
-                const lilyWrapper = document.createElement('div');
-                lilyWrapper.className = 'lily-flower';
-                lilyWrapper.innerHTML = lirioBotánicoSVG;
+        // Inyectar la marca de agua botánica
+        watermarkContainer.innerHTML = lilySVG;
 
-                // Cálculo de posiciones distribuidas de arriba a abajo
-                const posX = (c * (100 / columnas)) + (Math.random() * 5 - 2.5); // Con ligera variación para naturalidad
-                const posY = (f * (100 / filas)) + (Math.random() * 6 - 3);
+        // Distribución inteligente para crear una "Cama" o tapete de lirios
+        for (let i = 0; i < totalLilies; i++) {
+            const lilyWrapper = document.createElement('div');
+            lilyWrapper.className = 'lily-flower';
+            lilyWrapper.innerHTML = lilySVG;
 
-                lilyWrapper.style.left = posX + 'vw';
-                lilyWrapper.style.top = posY + 'vh';
+            // Coordenadas esparcidas por toda la pantalla (Cama completa)
+            lilyWrapper.style.left = (Math.random() * 95) + 'vw';
+            
+            // Unas nacen más arriba y otras más abajo para rellenar todo el fondo
+            const verticalShift = (Math.random() * 40); 
+            lilyWrapper.style.bottom = `-${verticalShift}vh`;
 
-                // Variación de escala proporcional para que parezca una alfombra tupida irregular
-                const tamañoBase = 150 + Math.random() * 100;
-                lilyWrapper.style.width = (tamañoBase * 0.75) + 'px';
-                lilyWrapper.style.height = tamañoBase + 'px';
+            // Escala proporcional
+            const scale = 160 + Math.random() * 180;
+            lilyWrapper.style.width = (scale * 0.75) + 'px';
+            lilyWrapper.style.height = scale + 'px';
 
-                // Profundidad visual: Las flores de atrás son un poco más opacas
-                if (f < 2) {
-                    lilyWrapper.style.filter = 'brightness(0.7) contrast(0.9)';
-                    lilyWrapper.style.zIndex = '2';
-                } else {
-                    lilyWrapper.style.filter = 'brightness(0.9) contrast(1.05)';
-                    lilyWrapper.style.zIndex = '5';
-                }
-
-                cama.appendChild(lilyWrapper);
-
-                // --- ANIMACIÓN 1: BROTE INICIAL ORGANICO AL CARGAR ---
-                const delayBrote = (f * 0.3) + (Math.random() * 0.5); // Florecen de atrás hacia adelante de forma escalonada
-                gsap.set(lilyWrapper, { scale: 0, opacity: 0 });
-
-                gsap.to(lilyWrapper, {
-                    scale: 1,
-                    opacity: 0.85,
-                    duration: 4,
-                    delay: delayBrote,
-                    ease: "power2.out"
-                });
-
-                // --- ANIMACIÓN 2: EFECTO DE BRISA Y RESPIRACIÓN EN TODO EL FONDO ---
-                gsap.to(lilyWrapper, {
-                    rotation: () => (Math.random() * 6) - 3,
-                    y: () => (Math.random() * 14) - 7,
-                    scaleX: "+=0.03",
-                    duration: 4 + Math.random() * 3,
-                    repeat: -1,
-                    yoyo: true,
-                    ease: "sine.inOut",
-                    delay: Math.random() * 2
-                });
+            // Oscurecer ligeramente las del fondo lejano para dar profundidad tridimensional
+            if(verticalShift > 20) {
+                lilyWrapper.style.filter = 'brightness(0.65) blur(1px)';
+                lilyWrapper.style.zIndex = '2';
+            } else {
+                lilyWrapper.style.filter = 'brightness(0.85)';
+                lilyWrapper.style.zIndex = '4';
             }
+
+            field.appendChild(lilyWrapper);
+
+            // --- ANIMACIÓN DE BROTE (FLORACIÓN CONTINUA) ---
+            const delay = Math.random() * 2;
+            gsap.set(lilyWrapper, { scale: 0.3, transformOrigin: "bottom center" });
+
+            gsap.to(lilyWrapper, {
+                bottom: `-${verticalShift - 10}vh`,
+                scale: 1,
+                opacity: 0.85,
+                duration: 5,
+                delay: delay,
+                ease: "power3.out"
+            });
+
+            // --- ANIMACIÓN DE VIENTO Y RESPIRACIÓN ORGÁNICA ---
+            gsap.to(lilyWrapper, {
+                rotation: () => (Math.random() * 6) - 3,
+                y: () => (Math.random() * 15) - 7,
+                scaleX: "+=0.04",
+                duration: 4 + Math.random() * 3,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                delay: Math.random() * 2
+            });
         }
 
-        // --- LLUVIA CONTINUA DE POLEN MÁGICO ---
+        // --- POLEN / DESTELLOS FLOTANTES ---
         function generateSparkle() {
             const sparkle = document.createElement('div');
             sparkle.className = 'sparkle';
@@ -265,8 +279,8 @@
             sparkle.style.height = size + 'px';
             sparkle.style.left = Math.random() * 100 + 'vw';
             
-            cama.appendChild(sparkle);
-            setTimeout(() => { sparkle.remove(); }, 9000);
+            field.appendChild(sparkle);
+            setTimeout(() => { sparkle.remove(); }, 10000);
         }
         setInterval(generateSparkle, 200);
 
@@ -275,8 +289,8 @@
             opacity: 1,
             y: 0,
             duration: 2.5,
-            delay: 1,
-            ease: "power3.out"
+            delay: 0.8,
+            ease: "power4.out"
         });
     </script>
 </body>
